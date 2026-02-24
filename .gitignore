@@ -1,0 +1,6 @@
+.idea
+.venv
+.pytest_cache
+__pycash__
+allure-report
+allure-results
