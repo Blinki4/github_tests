@@ -8,9 +8,4 @@ def test_search_linux_repo(driver, main_page, search_page):
     main_page.open_search()
     main_page.enter_search_input('linux')
     main_page.search_input.submit()
-    for title in search_page.results_titles:
-        if title.text == 'torvalds/linux':
-            assert True
-            break
-    else:
-        assert False
+    assert search_page.is_title_in_results('torvalds/linux')
