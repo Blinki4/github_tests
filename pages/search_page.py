@@ -16,4 +16,4 @@ class SearchPage(BasePage):
 
     @property
     def results_titles(self):
-        return self.find_several(self.results_titles_selector)
+        return self.wait_element(EC.visibility_of_all_elements_located(self.results_titles_selector))
