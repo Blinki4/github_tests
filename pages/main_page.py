@@ -20,6 +20,7 @@ class MainPage(BasePage):
         return self.find(self.input_button_selector)
 
 
+    @allure.step('Открыть поиск')
     def open_search(self):
         self.input_button.click()
 
@@ -32,3 +33,25 @@ class MainPage(BasePage):
     @allure.step('Ввести значение в поиск')
     def enter_search_input(self, value):
         return self.search_input.send_keys(value)
+
+
+    @allure.step('Открыть поиск хоткеем')
+    def open_search_input_with_hotkey(self):
+        self.input_button.send_keys('/')
+
+
+    @property
+    def search_input_is_displayed(self):
+        return self.search_input.is_displayed()
+
+
+    @allure.step('Submit поиск')
+    def submit_search(self):
+        self.search_input.submit()
+
+
+    @allure.step('Поиск')
+    def search(self, value):
+        self.open_search()
+        self.enter_search_input(value)
+        self.submit_search()
