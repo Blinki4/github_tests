@@ -23,7 +23,6 @@ def test_open_search_with_hotkey(main_page):
     assert main_page.search_input_is_displayed
 
 
-
 @pytest.mark.ui
 @allure.title('Поиск несуществующего объекта')
 def test_empty_results(main_page, search_page):

@@ -1,12 +1,13 @@
 import pytest
+import requests
 
 from pages.main_page import MainPage
+from pages.new_repo_page import NewRepoPage
+from pages.repo_page import RepoPage
 from pages.search_page import SearchPage
 from test_data import credentials
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
 from pages.login_page import LoginPage
 
 
@@ -27,6 +28,7 @@ def authorized_page(driver):
     page.enter_login(credentials.valid_login)
     page.enter_password(credentials.valid_password)
     page.click_sign_in()
+    page.home_title_is_displayed
     return page
 
 
@@ -46,5 +48,40 @@ def main_page(driver):
 
 @pytest.fixture()
 def search_page(driver):
-    page = SearchPage(driver)
-    return page
+    return SearchPage(driver)
+
+
+@pytest.fixture()
+def new_repo_page(driver, authorized_page):
+    new_repo_page = NewRepoPage(driver)
+    authorized_page.open(new_repo_page.url)
+    new_repo_page.repository_name_input_is_displayed
+    return new_repo_page
+
+
+@pytest.fixture()
+def repo_page(driver):
+    return RepoPage(driver)
+
+
+@pytest.fixture()
+def create_repo(new_repo_page):
+    new_repo_page.enter_repository_name(credentials.new_repo_name)
+    new_repo_page.repo_name_available_label_is_displayed
+    new_repo_page.click_create_repository_button()
+    return new_repo_page
+
+
+@pytest.fixture()
+def delete_repo():
+    yield
+    response = requests.delete(
+        f'https://api.github.com/repos/{credentials.valid_login}/{credentials.new_repo_name}',
+        headers={
+            'Authorization': f'Bearer {credentials.API_KEY}',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Accept': 'application/vnd.github+json'
+        }
+    )
+    print('STATUS CODE:', response.status_code)
+    assert response.status_code == 204

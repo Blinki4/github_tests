@@ -1,4 +1,6 @@
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 
 class BasePage:
@@ -27,3 +29,9 @@ class BasePage:
     @property
     def current_url(self):
         return self.driver.current_url
+
+
+    def wait_url_to_be(self, url: str, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.url_to_be(url)
+        )
