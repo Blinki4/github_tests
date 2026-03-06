@@ -1,3 +1,4 @@
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -34,4 +35,12 @@ class BasePage:
     def wait_url_to_be(self, url: str, timeout=10):
         return WebDriverWait(self.driver, timeout).until(
             EC.url_to_be(url)
+        )
+
+
+    def scroll_page_to_bottom(self):
+        html = self.find((By.CSS_SELECTOR, 'html'))
+        self.driver.execute_script(
+            'window.scrollTo(0, 100000)',
+            html
         )
