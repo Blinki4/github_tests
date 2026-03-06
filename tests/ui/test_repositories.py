@@ -42,7 +42,9 @@ def test_new_private_repo(new_repo_page, repo_page, delete_repo):
 @allure.title('Удаление репозитория')
 def test_delete_repo(create_repo, repo_page, delete_repo):
     repo_page.find((By.XPATH, '//*[@data-content="Settings"]')).click()
+    time.sleep(5)
     repo_page.driver.execute_script(
-        'window.scrollTo(0, 10000)'
+        'window.scrollTo(0, 100000)',
+        repo_page.find((By.CSS_SELECTOR, 'html'))
     )
     time.sleep(5)
