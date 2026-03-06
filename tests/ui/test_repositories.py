@@ -40,11 +40,18 @@ def test_new_private_repo(new_repo_page, repo_page, delete_repo):
 
 @pytest.mark.ui
 @allure.title('Удаление репозитория')
-def test_delete_repo(create_repo, repo_page, delete_repo):
+def test_delete_repo(create_repo, repo_page):
     repo_page.find((By.XPATH, '//*[@data-content="Settings"]')).click()
     time.sleep(5)
     repo_page.driver.execute_script(
         'window.scrollTo(0, 100000)',
         repo_page.find((By.CSS_SELECTOR, 'html'))
     )
-    time.sleep(5)
+
+    repo_page.find((By.CSS_SELECTOR, '.js-repo-delete-button')).click()
+    repo_page.wait_element(EC.element_to_be_clickable((By.ID, 'repo-delete-proceed-button'))).click()
+    repo_page.wait_element(EC.element_to_be_clickable((By.ID, 'repo-delete-proceed-button'))).click()
+    proceed_input = repo_page.wait_element(EC.element_to_be_clickable((By.XPATH, '//input[@data-test-selector="repo-delete-proceed-confirmation"]')))
+    proceed_input.send_keys(f'{credentials.valid_login}/{credentials.new_repo_name}')
+    repo_page.wait_element(EC.element_to_be_clickable((By.ID, 'repo-delete-proceed-button'))).click()
+    notification = repo_page.wait_element(EC.visibility_of_element_located((By.CSS_SELECTOR, '.js-flash-alert'))).is_displayed()
