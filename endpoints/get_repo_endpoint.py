@@ -26,5 +26,5 @@ class GetRepoEndpoint(BaseEndpoint):
         self.status_code = response.status_code
         if response.status_code == 200:
             self.name = response.json()['name']
-            self.owner = response.json()['owner']['name']
+            self.owner = response.json()['owner']['login']
         return response

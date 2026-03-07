@@ -101,9 +101,10 @@ def get_repo_endpoint():
 
 
 @pytest.fixture()
-def create_repo(create_repo_endpoint):
+def create_repo_with_api(create_repo_endpoint):
     repository = Repository(
         name=f'{credentials.new_repo_name}',
-
+        description='description'
     )
-    create_repo_endpoint.create_repo()
+    response = create_repo_endpoint.create_repo(repository)
+    assert response.status_code == 201

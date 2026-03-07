@@ -18,7 +18,7 @@ class CreateRepoEndpoint(BaseEndpoint):
     message: str
 
 
-    def create_repo(self, body: Repository, authorized: bool) -> Response:
+    def create_repo(self, body: Repository, authorized: bool = True) -> Response:
         response = requests.post(
             f'{self.base_url}{self.url}',
             headers = {
