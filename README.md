@@ -1,4 +1,4 @@
-# github_tests
+# GitHub автотесты
 
 ## Запуск
 
