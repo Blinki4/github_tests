@@ -32,13 +32,11 @@ def test_create_private_repo(create_repo_endpoint, delete_repo):
 
 @pytest.mark.api
 @allure.title('API создание репозитория с существующим именем')
-def test_create_repo_with_existing_name(create_repo_endpoint, delete_repo):
+def test_create_repo_with_existing_name(create_repo_with_api, create_repo_endpoint, delete_repo):
     repository = Repository(
         name=f'{credentials.new_repo_name}',
         description='description'
     )
-    create_repo_endpoint.create_repo(repository, authorized=True)
-    assert create_repo_endpoint.status_code == 201
     create_repo_endpoint.create_repo(repository, authorized=True)
     assert create_repo_endpoint.status_code == 422
 
