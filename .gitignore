@@ -1,7 +1,7 @@
 .idea
 .venv
 .pytest_cache
-__pycashe__
+__pycasche__
 allure-report
 allure-results
 test_data/credentials.py

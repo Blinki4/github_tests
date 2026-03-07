@@ -62,3 +62,9 @@ def test_get_existing_repo(create_repo_with_api, get_repo_endpoint, delete_repo)
     print(response.json())
     assert get_repo_endpoint.status_code == 200
     assert get_repo_endpoint.name == credentials.new_repo_name
+
+
+@pytest.mark.api
+@allure.title('API получение несуществующего репозитория')
+def test_get_non_existing_repo(get_repo_endpoint):
+    ...
