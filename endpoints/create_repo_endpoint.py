@@ -20,11 +20,7 @@ class CreateRepoEndpoint(BaseEndpoint):
     def create_repo(self, body: Repository, authorized: bool = True) -> Response:
         response = requests.post(
             f'{self.base_url}{self.url}',
-            headers = {
-                'Accept': 'application/vnd.github+json',
-                'Authorization': f'Bearer {self.token}' if authorized else None,
-                'X-GitHub-Api-Version': '2022-11-28'
-            },
+            headers = self.get_headers(authorized),
             json = asdict(body)
         )
         self.status_code = response.status_code

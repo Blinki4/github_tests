@@ -12,11 +12,7 @@ class DeleteRepoEndpoint(BaseEndpoint):
     def delete_repo(self, repo_name: str) -> Response:
         response = requests.delete(
             f'{self.url}/{repo_name}',
-            headers={
-            'Accept': 'application/vnd.github+json',
-            'Authorization': f'Bearer {self.token}',
-            'X-GitHub-Api-Version': '2022-11-28',
-            }
+            headers=self.get_headers()
         )
         self.status_code = response.status_code
         return response

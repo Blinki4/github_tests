@@ -16,11 +16,7 @@ class GetRepoEndpoint(BaseEndpoint):
     def get_repo(self, owner: str, repo: str) -> Response:
         response = requests.get(
             f'{self.url}/{owner}/{repo}',
-            headers={
-                'Accept': 'application/vnd.github+json',
-                'Authorization': f'Bearer {self.token}',
-                'X-GitHub-Api-Version': '2022-11-28'
-            }
+            headers=self.get_headers()
         )
         self.status_code = response.status_code
         if response.status_code == 200:
