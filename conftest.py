@@ -1,6 +1,7 @@
 import pytest
 import requests
 
+from endpoints.create_repo_endpoint import CreateRepoEndpoint
 from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
 from pages.repo_page import RepoPage
@@ -85,3 +86,9 @@ def delete_repo():
     )
     print('STATUS CODE:', response.status_code)
     assert response.status_code == 204
+
+
+@pytest.fixture()
+def create_repo_endpoint():
+    return CreateRepoEndpoint()
+
