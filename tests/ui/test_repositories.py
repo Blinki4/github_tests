@@ -1,10 +1,8 @@
-import time
 import pytest
 import allure
 
 from selenium.webdriver.common.by import By
 from test_data import credentials
-from selenium.webdriver.support import expected_conditions as EC
 
 
 @pytest.mark.ui
@@ -43,7 +41,7 @@ def test_new_private_repo(new_repo_page, repo_page, delete_repo):
 def test_delete_repo(create_repo, repo_page):
     repo_page.click_settings()
     repo_page.scroll_page_to_bottom()
-    repo_page.find((By.CSS_SELECTOR, '.js-repo-delete-button')).click()
+    repo_page.click_start_delete_repo_button()
     repo_page.click_delete_repo_button()
     repo_page.click_delete_repo_button()
     repo_page.enter_proceed_input(f'{credentials.valid_login}/{credentials.new_repo_name}')
