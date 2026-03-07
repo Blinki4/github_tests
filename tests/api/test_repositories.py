@@ -67,4 +67,12 @@ def test_get_existing_repo(create_repo_with_api, get_repo_endpoint, delete_repo)
 @pytest.mark.api
 @allure.title('API получение несуществующего репозитория')
 def test_get_non_existing_repo(get_repo_endpoint):
-    ...
+    get_repo_endpoint.get_repo(f'{credentials.valid_login}', 'bulbozhabchik')
+    assert get_repo_endpoint.status_code == 404
+
+
+@pytest.mark.api
+@allure.title('API получение репозитория у несуществующего пользователя')
+def test_get_repo_non_existing_user(get_repo_endpoint):
+    get_repo_endpoint.get_repo('BulboZhabchik', 'bulbozhabchik')
+    assert get_repo_endpoint.status_code == 404
