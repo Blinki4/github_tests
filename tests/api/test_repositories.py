@@ -58,8 +58,7 @@ def test_create_repo_unauthorized(create_repo_endpoint):
 @pytest.mark.api
 @allure.title('API получение существующего репозитория')
 def test_get_existing_repo(create_repo_with_api, get_repo_endpoint, delete_repo):
-    response = get_repo_endpoint.get_repo(f'{credentials.valid_login}', f'{credentials.new_repo_name}')
-    print(response.json())
+    get_repo_endpoint.get_repo(f'{credentials.valid_login}', f'{credentials.new_repo_name}')
     assert get_repo_endpoint.status_code == 200
     assert get_repo_endpoint.name == credentials.new_repo_name
 

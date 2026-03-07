@@ -11,7 +11,6 @@ from dataclasses import asdict
 
 class CreateRepoEndpoint(BaseEndpoint):
     url: str = '/user/repos'
-    status_code: int
     name: str
     description: str
     is_private: bool

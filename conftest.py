@@ -3,6 +3,7 @@ import requests
 
 from dto.repository import Repository
 from endpoints.create_repo_endpoint import CreateRepoEndpoint
+from endpoints.delete_repo_endpoint import DeleteRepoEndpoint
 from endpoints.get_repo_endpoint import GetRepoEndpoint
 from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
@@ -75,19 +76,6 @@ def create_repo(new_repo_page):
     return new_repo_page
 
 
-@pytest.fixture()
-def delete_repo():
-    yield
-    response = requests.delete(
-        f'https://api.github.com/repos/{credentials.valid_login}/{credentials.new_repo_name}',
-        headers={
-            'Authorization': f'Bearer {credentials.API_KEY}',
-            'X-GitHub-Api-Version': '2022-11-28',
-            'Accept': 'application/vnd.github+json'
-        }
-    )
-    print('\nSTATUS CODE:', response.status_code)
-    assert response.status_code == 204
 
 
 @pytest.fixture()
@@ -98,6 +86,19 @@ def create_repo_endpoint():
 @pytest.fixture()
 def get_repo_endpoint():
     return GetRepoEndpoint()
+
+
+@pytest.fixture()
+def delete_repo_endpoint():
+    return DeleteRepoEndpoint()
+
+
+@pytest.fixture()
+def delete_repo(delete_repo_endpoint):
+    yield
+    response = delete_repo_endpoint.delete_repo(f'{credentials.new_repo_name}')
+    print('\nSTATUS CODE:', response.status_code)
+    assert response.status_code == 204
 
 
 @pytest.fixture()

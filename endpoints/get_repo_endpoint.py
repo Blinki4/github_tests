@@ -5,7 +5,6 @@ from endpoints.base_endpoint import BaseEndpoint
 
 
 class GetRepoEndpoint(BaseEndpoint):
-    status_code: int
     name: str
     owner: str
 
