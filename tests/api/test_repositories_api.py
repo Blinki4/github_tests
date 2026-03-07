@@ -75,3 +75,18 @@ def test_get_non_existing_repo(get_repo_endpoint):
 def test_get_repo_non_existing_user(get_repo_endpoint):
     get_repo_endpoint.get_repo('BulboZhabchik', 'bulbozhabchik')
     assert get_repo_endpoint.status_code == 404
+
+
+
+@pytest.mark.api
+@allure.title('API удаление репозитория')
+def test_delete_repo(create_repo_with_api, delete_repo_endpoint):
+    delete_repo_endpoint.delete_repo(f'{credentials.new_repo_name}')
+    assert delete_repo_endpoint.status_code == 204
+
+
+@pytest.mark.api
+@allure.title('Удаление несуществующего репозитория')
+def test_delete_non_existing_repo(delete_repo_endpoint):
+    delete_repo_endpoint.delete_repo(f'{credentials.new_repo_name}')
+    assert delete_repo_endpoint.status_code == 404
