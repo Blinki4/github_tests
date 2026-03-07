@@ -5,6 +5,7 @@ from requests import Response
 
 from dto.repository import Repository
 from endpoints.base_endpoint import BaseEndpoint
+from dataclasses import asdict
 
 
 
@@ -25,7 +26,7 @@ class CreateRepoEndpoint(BaseEndpoint):
                 'Authorization': f'Bearer {self.token}' if authorized else None,
                 'X-GitHub-Api-Version': '2022-11-28'
             },
-            json = body
+            json = asdict(body)
         )
         self.status_code = response.status_code
         if response.status_code == 201:

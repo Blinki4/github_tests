@@ -1,7 +1,9 @@
 import pytest
 import requests
 
+from dto.repository import Repository
 from endpoints.create_repo_endpoint import CreateRepoEndpoint
+from endpoints.get_repo_endpoint import GetRepoEndpoint
 from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
 from pages.repo_page import RepoPage
@@ -84,7 +86,7 @@ def delete_repo():
             'Accept': 'application/vnd.github+json'
         }
     )
-    print('STATUS CODE:', response.status_code)
+    print('\nSTATUS CODE:', response.status_code)
     assert response.status_code == 204
 
 
@@ -92,3 +94,16 @@ def delete_repo():
 def create_repo_endpoint():
     return CreateRepoEndpoint()
 
+
+@pytest.fixture()
+def get_repo_endpoint():
+    return GetRepoEndpoint()
+
+
+@pytest.fixture()
+def create_repo(create_repo_endpoint):
+    repository = Repository(
+        name=f'{credentials.new_repo_name}',
+
+    )
+    create_repo_endpoint.create_repo()
