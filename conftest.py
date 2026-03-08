@@ -5,6 +5,7 @@ from dto.repository import Repository
 from endpoints.create_repo_endpoint import CreateRepoEndpoint
 from endpoints.delete_repo_endpoint import DeleteRepoEndpoint
 from endpoints.get_repo_endpoint import GetRepoEndpoint
+from endpoints.get_user_endpoint import GetUserEndpoint
 from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
 from pages.repo_page import RepoPage
@@ -109,3 +110,9 @@ def create_repo_with_api(create_repo_endpoint):
     )
     response = create_repo_endpoint.create_repo(repository)
     assert response.status_code == 201
+
+
+
+@pytest.fixture()
+def get_user_endpoint():
+    return GetUserEndpoint()
