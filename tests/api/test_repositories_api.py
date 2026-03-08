@@ -1,6 +1,7 @@
 import pytest
 import allure
 
+from dto.get_repo_response import GetRepoResponse
 from dto.repository import Repository
 from test_data import credentials
 
@@ -12,7 +13,8 @@ def test_create_repo_api(create_repo_endpoint, delete_repo):
         name=f'{credentials.new_repo_name}',
         description='description'
     )
-    create_repo_endpoint.create_repo(repository, authorized=True)
+    response = create_repo_endpoint.create_repo(repository, authorized=True)
+    GetRepoResponse(**response.json())
     assert create_repo_endpoint.status_code == 201
     assert create_repo_endpoint.name == credentials.new_repo_name
 
