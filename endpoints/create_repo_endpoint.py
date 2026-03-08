@@ -1,8 +1,7 @@
 import requests
-
+import allure
 
 from requests import Response
-
 from dto.repository import Repository
 from endpoints.base_endpoint import BaseEndpoint
 from dataclasses import asdict
@@ -17,7 +16,13 @@ class CreateRepoEndpoint(BaseEndpoint):
     message: str
 
 
+    @allure.step('Создание репозитория')
     def create_repo(self, body: Repository, authorized: bool = True) -> Response:
+        """
+        Создание репозитория
+        :param body: Параметры репозитория
+        :param authorized: Авторизован ли запрос
+        """
         response = requests.post(
             f'{self.base_url}{self.url}',
             headers = self.get_headers(authorized),
