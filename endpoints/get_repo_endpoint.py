@@ -1,3 +1,4 @@
+import allure
 import requests
 from requests import Response
 
@@ -13,7 +14,13 @@ class GetRepoEndpoint(BaseEndpoint):
         self.url = f'{self.base_url}/repos'
 
 
+    @allure.step('Получение репозитория')
     def get_repo(self, owner: str, repo: str) -> Response:
+        """
+        Получение репозитория
+        :param owner: Владелец репозитория
+        :param repo: Название репозитория
+        """
         response = requests.get(
             f'{self.url}/{owner}/{repo}',
             headers=self.get_headers()

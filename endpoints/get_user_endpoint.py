@@ -1,3 +1,4 @@
+import allure
 import requests
 from requests import Response
 
@@ -7,7 +8,13 @@ from endpoints.base_endpoint import BaseEndpoint
 class GetUserEndpoint(BaseEndpoint):
     login: str
 
+
+    @allure.step('Получение пользователя')
     def get_user(self, username: str) -> Response:
+        """
+        Получение пользователя
+        :param username: Имя пользователя
+        """
         response = requests.get(
             f'{self.base_url}/users/{username}',
             headers=self.get_headers()
