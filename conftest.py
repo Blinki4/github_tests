@@ -1,5 +1,4 @@
 import pytest
-import requests
 
 from dto.repository import Repository
 from endpoints.create_repo_endpoint import CreateRepoEndpoint
@@ -19,6 +18,7 @@ from pages.login_page import LoginPage
 @pytest.fixture()
 def driver():
     options = Options()
+    options.add_argument('--headless')
     options.add_argument('--window-size=1920,1080')
     driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(10)
