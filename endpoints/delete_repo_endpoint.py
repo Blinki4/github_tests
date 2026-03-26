@@ -8,7 +8,7 @@ from test_data import credentials
 class DeleteRepoEndpoint(BaseEndpoint):
     def __init__(self):
         super().__init__()
-        self.url = f'{self.base_url}/repos/{credentials.valid_login}'
+        self.url = f'{self.base_url}/repos/{credentials.LOGIN}'
 
 
     @allure.step('Удаление репозитория')

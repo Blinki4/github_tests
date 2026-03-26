@@ -8,13 +8,13 @@ from test_data import credentials
 @pytest.mark.ui
 @allure.title('Переход на страницу нового репозитория')
 def test_redirect_to_new_repo_page(create_repo, delete_repo):
-    assert create_repo.wait_url_to_be(f'https://github.com/Blinki4/{credentials.new_repo_name}')
+    assert create_repo.wait_url_to_be(f'https://github.com/Blinki4/{credentials.REPO_NAME}')
 
 
 @pytest.mark.ui
 @allure.title('Проверка названия нового репозитория после создания')
 def test_new_repo_title_displayed(create_repo, repo_page, delete_repo):
-    assert repo_page.repo_title_text == credentials.new_repo_name
+    assert repo_page.repo_title_text == credentials.REPO_NAME
 
 
 @pytest.mark.ui
@@ -27,12 +27,12 @@ def test_new_repo_with_existing_name(new_repo_page):
 @pytest.mark.ui
 @allure.title('Создание приватного репозитория')
 def test_new_private_repo(new_repo_page, repo_page, delete_repo):
-    new_repo_page.enter_repository_name(credentials.new_repo_name)
+    new_repo_page.enter_repository_name(credentials.REPO_NAME)
     new_repo_page.repo_name_available_label_is_displayed
     new_repo_page.click_visibility_select()
     new_repo_page.click_private_option()
     new_repo_page.click_create_repository_button()
-    assert repo_page.repo_title_text == credentials.new_repo_name
+    assert repo_page.repo_title_text == credentials.REPO_NAME
 
 
 
@@ -44,6 +44,6 @@ def test_delete_repo(create_repo, repo_page):
     repo_page.click_start_delete_repo_button()
     repo_page.click_delete_repo_button()
     repo_page.click_delete_repo_button()
-    repo_page.enter_proceed_input(f'{credentials.valid_login}/{credentials.new_repo_name}')
+    repo_page.enter_proceed_input(f'{credentials.LOGIN}/{credentials.REPO_NAME}')
     repo_page.click_delete_repo_button()
     assert repo_page.delete_notification_id_displayed

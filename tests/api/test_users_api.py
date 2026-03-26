@@ -6,7 +6,7 @@ from test_data import credentials
 
 @pytest.mark.api
 @allure.title('Получение пользователя')
-@pytest.mark.parametrize('username', [f'{credentials.valid_login}', 'ivanushka-na-python'])
+@pytest.mark.parametrize('username', [f'{credentials.LOGIN}', 'ivanushka-na-python'])
 def test_get_user(get_user_endpoint, username):
     get_user_endpoint.get_user(username)
     assert get_user_endpoint.status_code == 200

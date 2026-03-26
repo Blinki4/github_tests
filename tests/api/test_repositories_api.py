@@ -10,20 +10,20 @@ from test_data import credentials
 @allure.title('API создание репозитория')
 def test_create_repo_api(create_repo_endpoint, delete_repo):
     repository = Repository(
-        name=f'{credentials.new_repo_name}',
+        name=f'{credentials.REPO_NAME}',
         description='description'
     )
     response = create_repo_endpoint.create_repo(repository, authorized=True)
     GetRepoResponse(**response.json())
     assert create_repo_endpoint.status_code == 201
-    assert create_repo_endpoint.name == credentials.new_repo_name
+    assert create_repo_endpoint.name == credentials.REPO_NAME
 
 
 @pytest.mark.api
 @allure.title('API создание приватного репозитория')
 def test_create_private_repo(create_repo_endpoint, delete_repo):
     repository = Repository(
-        name=f'{credentials.new_repo_name}',
+        name=f'{credentials.REPO_NAME}',
         description='description',
         private=True
     )
@@ -36,7 +36,7 @@ def test_create_private_repo(create_repo_endpoint, delete_repo):
 @allure.title('API создание репозитория с существующим именем')
 def test_create_repo_with_existing_name(create_repo_with_api, create_repo_endpoint, delete_repo):
     repository = Repository(
-        name=f'{credentials.new_repo_name}',
+        name=f'{credentials.REPO_NAME}',
         description='description'
     )
     create_repo_endpoint.create_repo(repository, authorized=True)
@@ -47,26 +47,24 @@ def test_create_repo_with_existing_name(create_repo_with_api, create_repo_endpoi
 @allure.title('API создание репозитория без авторизации')
 def test_create_repo_unauthorized(create_repo_endpoint):
     repository = Repository(
-        name=f'{credentials.new_repo_name}',
+        name=f'{credentials.REPO_NAME}',
         description='description'
     )
     create_repo_endpoint.create_repo(repository, authorized=False)
     assert create_repo_endpoint.status_code == 401
     assert create_repo_endpoint.message == 'Requires authentication'
 
-
 @pytest.mark.api
 @allure.title('API получение существующего репозитория')
 def test_get_existing_repo(create_repo_with_api, get_repo_endpoint, delete_repo):
-    get_repo_endpoint.get_repo(f'{credentials.valid_login}', f'{credentials.new_repo_name}')
+    get_repo_endpoint.get_repo(f'{credentials.LOGIN}', f'{credentials.REPO_NAME}')
     assert get_repo_endpoint.status_code == 200
-    assert get_repo_endpoint.name == credentials.new_repo_name
-
+    assert get_repo_endpoint.name == credentials.REPO_NAME
 
 @pytest.mark.api
 @allure.title('API получение несуществующего репозитория')
 def test_get_non_existing_repo(get_repo_endpoint):
-    get_repo_endpoint.get_repo(f'{credentials.valid_login}', 'bulbozhabchik')
+    get_repo_endpoint.get_repo(f'{credentials.LOGIN}', 'bulbozhabchik')
     assert get_repo_endpoint.status_code == 404
 
 
@@ -81,12 +79,12 @@ def test_get_repo_non_existing_user(get_repo_endpoint):
 @pytest.mark.api
 @allure.title('API удаление репозитория')
 def test_delete_repo(create_repo_with_api, delete_repo_endpoint):
-    delete_repo_endpoint.delete_repo(f'{credentials.new_repo_name}')
+    delete_repo_endpoint.delete_repo(f'{credentials.REPO_NAME}')
     assert delete_repo_endpoint.status_code == 204
 
 
 @pytest.mark.api
 @allure.title('Удаление несуществующего репозитория')
 def test_delete_non_existing_repo(delete_repo_endpoint):
-    delete_repo_endpoint.delete_repo(f'{credentials.new_repo_name}')
+    delete_repo_endpoint.delete_repo(f'{credentials.REPO_NAME}')
     assert delete_repo_endpoint.status_code == 404

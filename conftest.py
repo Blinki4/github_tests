@@ -9,6 +9,7 @@ from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
 from pages.repo_page import RepoPage
 from pages.search_page import SearchPage
+from services.repository.repository_api_service import RepositoryAPIService
 from test_data import credentials
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -29,8 +30,8 @@ def driver():
 def authorized_page(driver):
     page = LoginPage(driver)
     page.open(page.url)
-    page.enter_login(credentials.valid_login)
-    page.enter_password(credentials.valid_password)
+    page.enter_login(credentials.LOGIN)
+    page.enter_password(credentials.PASSWORD)
     page.click_sign_in()
     page.home_title_is_displayed
     return page
@@ -64,7 +65,7 @@ def repo_page(driver):
 
 @pytest.fixture()
 def create_repo(new_repo_page):
-    new_repo_page.enter_repository_name(credentials.new_repo_name)
+    new_repo_page.enter_repository_name(credentials.REPO_NAME)
     new_repo_page.repo_name_available_label_is_displayed
     new_repo_page.click_create_repository_button()
     return new_repo_page
@@ -88,16 +89,21 @@ def get_user_endpoint():
 @pytest.fixture()
 def delete_repo(delete_repo_endpoint):
     yield
-    response = delete_repo_endpoint.delete_repo(f'{credentials.new_repo_name}')
+    response = delete_repo_endpoint.delete_repo(f'{credentials.REPO_NAME}')
     print('\nSTATUS CODE:', response.status_code)
     assert response.status_code == 204
-
 
 @pytest.fixture()
 def create_repo_with_api(create_repo_endpoint):
     repository = Repository(
-        name=f'{credentials.new_repo_name}',
+        name=f'{credentials.REPO_NAME}',
         description='description'
     )
     response = create_repo_endpoint.create_repo(repository)
     assert response.status_code == 201
+
+##### Service Object
+
+@pytest.fixture()
+def repository_api_service():
+    return RepositoryAPIService()

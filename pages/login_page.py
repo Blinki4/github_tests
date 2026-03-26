@@ -13,7 +13,7 @@ class LoginPage(BasePage):
     sign_in_button_selector = (By.XPATH, '//input[@value="Sign in"]')
     home_title_selector = (By.XPATH, '//h2[text()="Home"]')
     navbar_avatar_selector = (By.XPATH, '//img[@data-testid="github-avatar"]')
-    navigation_menu_username_selector = (By.XPATH, f'//div[@title="{credentials.valid_login}"]')
+    navigation_menu_username_selector = (By.XPATH, f'//div[@title="{credentials.LOGIN}"]')
     error_selector = (By.CSS_SELECTOR, '.js-flash-alert')
     forgot_password_link_selector = (By.ID, 'forgot-password')
     create_account_link_selector = (By.LINK_TEXT, 'Create an account')

@@ -13,13 +13,13 @@ def test_redirect_to_main_page_after_sign_in(authorized_page):
 @allure.title('Проверка имени пользователя после авторизации')
 def test_sign_in(authorized_page):
     authorized_page.click_navbar_avatar()
-    assert authorized_page.navigation_menu_username_text == credentials.valid_login
+    assert authorized_page.navigation_menu_username_text == credentials.LOGIN
 
 
 @pytest.mark.ui
 @allure.title('Авторизация с неправильным паролем')
 def test_auth_with_invalid_password(login_page):
-    login_page.enter_login(credentials.valid_login)
+    login_page.enter_login(credentials.LOGIN)
     login_page.enter_password('invalid')
     login_page.click_sign_in()
     assert login_page.error_text == 'Incorrect username or password.'
