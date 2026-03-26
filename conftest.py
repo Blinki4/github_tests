@@ -25,7 +25,6 @@ def driver():
     yield driver
     driver.quit()
 
-
 @pytest.fixture()
 def authorized_page(driver):
     page = LoginPage(driver)
@@ -36,13 +35,11 @@ def authorized_page(driver):
     page.home_title_is_displayed
     return page
 
-
 @pytest.fixture()
 def login_page(driver):
     page = LoginPage(driver)
     page.open(page.url)
     return page
-
 
 @pytest.fixture()
 def main_page(driver):
@@ -50,11 +47,9 @@ def main_page(driver):
     page.open(page.url)
     return page
 
-
 @pytest.fixture()
 def search_page(driver):
     return SearchPage(driver)
-
 
 @pytest.fixture()
 def new_repo_page(driver, authorized_page):
@@ -63,11 +58,9 @@ def new_repo_page(driver, authorized_page):
     new_repo_page.repository_name_input_is_displayed
     return new_repo_page
 
-
 @pytest.fixture()
 def repo_page(driver):
     return RepoPage(driver)
-
 
 @pytest.fixture()
 def create_repo(new_repo_page):
@@ -76,23 +69,21 @@ def create_repo(new_repo_page):
     new_repo_page.click_create_repository_button()
     return new_repo_page
 
-
-
-
 @pytest.fixture()
 def create_repo_endpoint():
     return CreateRepoEndpoint()
-
 
 @pytest.fixture()
 def get_repo_endpoint():
     return GetRepoEndpoint()
 
-
 @pytest.fixture()
 def delete_repo_endpoint():
     return DeleteRepoEndpoint()
 
+@pytest.fixture()
+def get_user_endpoint():
+    return GetUserEndpoint()
 
 @pytest.fixture()
 def delete_repo(delete_repo_endpoint):
@@ -110,9 +101,3 @@ def create_repo_with_api(create_repo_endpoint):
     )
     response = create_repo_endpoint.create_repo(repository)
     assert response.status_code == 201
-
-
-
-@pytest.fixture()
-def get_user_endpoint():
-    return GetUserEndpoint()
