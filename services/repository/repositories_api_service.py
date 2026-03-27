@@ -1,18 +1,18 @@
 import allure
 import requests
 from requests import Response
-from services.repository.models.create_repository_model import CreateRepositoryModel
-from services.repository.models.get_repository_model import GetRepositoryModel
+from services.repository.models.create_repository_response_model import CreateRepositoryResponseModel
+from services.repository.models.get_repository_response_model import GetRepositoryResponseModel
 from config.headers import Headers
 
 
-class RepositoryAPIService:
+class RepositoriesAPIService:
     def __init__(self):
         self._base_url = 'https://api.github.com'
         self._headers = Headers()
 
     @allure.step('Get a repository')
-    def get_repository(self, owner: str, repo: str) -> GetRepositoryModel | Response:
+    def get_repository(self, owner: str, repo: str) -> GetRepositoryResponseModel | Response:
         """
         Получение репозитория
         :param owner: Владелец репозитория
@@ -24,12 +24,11 @@ class RepositoryAPIService:
         )
         if response.status_code == 200:
             assert response.status_code == 200, response.json()
-            return GetRepositoryModel(**response.json())
-        print('STATUS CODE:', response.status_code)
+            return GetRepositoryResponseModel(**response.json())
         return response
 
     @allure.step('Create a repository')
-    def create_repository(self, body, authorized: bool = True) -> CreateRepositoryModel | Response:
+    def create_repository(self, body, authorized: bool = True) -> CreateRepositoryResponseModel | Response:
         """
         Создание репозитория
         :param body: Тело запроса
@@ -43,7 +42,7 @@ class RepositoryAPIService:
         )
         if response.status_code == 201:
             assert response.status_code == 201, response.json()
-            return CreateRepositoryModel(**response.json())
+            return CreateRepositoryResponseModel(**response.json())
         return response
 
     @allure.step('Delete a repository')

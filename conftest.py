@@ -3,7 +3,8 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
-from services.repository.repository_api_service import RepositoryAPIService
+from services.repository.repositories_api_service import RepositoriesAPIService
+from services.users.users_api_service import UsersAPIService
 from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
 from pages.repo_page import RepoPage
@@ -60,21 +61,25 @@ def repo_page(driver):
     return RepoPage(driver)
 
 @pytest.fixture()
-def repository_api_service():
-    return RepositoryAPIService()
+def repositories_api_service():
+    return RepositoriesAPIService()
 
 @pytest.fixture()
-def create_repository_req(repository_api_service):
+def users_api_service():
+    return UsersAPIService()
+
+@pytest.fixture()
+def create_repository_req(repositories_api_service):
     new_repository = {
         'name': os.getenv('REPO_NAME'),
         'description': 'new_description'
     }
-    repository_api_service.create_repository(body=new_repository)
+    repositories_api_service.create_repository(body=new_repository)
 
 @pytest.fixture()
-def delete_repository_req(repository_api_service):
+def delete_repository_req(repositories_api_service):
     yield
-    repository_api_service.delete_repository(
+    repositories_api_service.delete_repository(
         owner=os.getenv('LOGIN'),
         repo=os.getenv('REPO_NAME')
     )
