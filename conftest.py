@@ -1,5 +1,7 @@
-import pytest
+import os
 
+import pytest
+from dotenv import load_dotenv
 from dto.repository import Repository
 from endpoints.create_repo_endpoint import CreateRepoEndpoint
 from endpoints.delete_repo_endpoint import DeleteRepoEndpoint
@@ -15,6 +17,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from pages.login_page import LoginPage
 
+load_dotenv()
 
 @pytest.fixture()
 def driver():
@@ -25,13 +28,13 @@ def driver():
     driver.implicitly_wait(10)
     yield driver
     driver.quit()
-
+#
 @pytest.fixture()
 def authorized_page(driver):
     page = LoginPage(driver)
     page.open(page.url)
-    page.enter_login(credentials.LOGIN)
-    page.enter_password(credentials.PASSWORD)
+    page.enter_login(os.getenv('LOGIN'))
+    page.enter_password(os.getenv('PASSWORD'))
     page.click_sign_in()
     page.home_title_is_displayed
     return page
@@ -62,48 +65,64 @@ def new_repo_page(driver, authorized_page):
 @pytest.fixture()
 def repo_page(driver):
     return RepoPage(driver)
-
-@pytest.fixture()
-def create_repo(new_repo_page):
-    new_repo_page.enter_repository_name(credentials.REPO_NAME)
-    new_repo_page.repo_name_available_label_is_displayed
-    new_repo_page.click_create_repository_button()
-    return new_repo_page
-
-@pytest.fixture()
-def create_repo_endpoint():
-    return CreateRepoEndpoint()
-
-@pytest.fixture()
-def get_repo_endpoint():
-    return GetRepoEndpoint()
-
-@pytest.fixture()
-def delete_repo_endpoint():
-    return DeleteRepoEndpoint()
-
-@pytest.fixture()
-def get_user_endpoint():
-    return GetUserEndpoint()
-
-@pytest.fixture()
-def delete_repo(delete_repo_endpoint):
-    yield
-    response = delete_repo_endpoint.delete_repo(f'{credentials.REPO_NAME}')
-    print('\nSTATUS CODE:', response.status_code)
-    assert response.status_code == 204
-
-@pytest.fixture()
-def create_repo_with_api(create_repo_endpoint):
-    repository = Repository(
-        name=f'{credentials.REPO_NAME}',
-        description='description'
-    )
-    response = create_repo_endpoint.create_repo(repository)
-    assert response.status_code == 201
+#
+# @pytest.fixture()
+# def create_repo(new_repo_page):
+#     new_repo_page.enter_repository_name(os.getenv('REPO_NAME'))
+#     new_repo_page.repo_name_available_label_is_displayed
+#     new_repo_page.click_create_repository_button()
+#     return new_repo_page
+#
+# @pytest.fixture()
+# def create_repo_endpoint():
+#     return CreateRepoEndpoint()
+#
+# @pytest.fixture()
+# def get_repo_endpoint():
+#     return GetRepoEndpoint()
+#
+# @pytest.fixture()
+# def delete_repo_endpoint():
+#     return DeleteRepoEndpoint()
+#
+# @pytest.fixture()
+# def get_user_endpoint():
+#     return GetUserEndpoint()
+#
+# @pytest.fixture()
+# def delete_repo(delete_repo_endpoint):
+#     yield
+#     response = delete_repo_endpoint.delete_repo(f'{os.getenv('REPO_NAME')}')
+#     print('\nSTATUS CODE:', response.status_code)
+#     assert response.status_code == 204
+#
+# @pytest.fixture()
+# def create_repo_with_api(create_repo_endpoint):
+#     repository = Repository(
+#         name=f'{os.getenv('REPO_NAME')}',
+#         description='description'
+#     )
+#     response = create_repo_endpoint.create_repo(repository)
+#     assert response.status_code == 201
 
 ##### Service Object
 
 @pytest.fixture()
 def repository_api_service():
     return RepositoryAPIService()
+
+@pytest.fixture()
+def create_repository_req(repository_api_service):
+    new_repository = {
+        'name': os.getenv('REPO_NAME'),
+        'description': 'new_description'
+    }
+    repository_api_service.create_repository(body=new_repository)
+
+@pytest.fixture()
+def delete_repository_req(repository_api_service):
+    yield
+    repository_api_service.delete_repository(
+        owner=os.getenv('LOGIN'),
+        repo=os.getenv('REPO_NAME')
+    )
