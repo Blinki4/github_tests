@@ -1,90 +1,95 @@
-import pytest
+import os
 import allure
+import pytest
+from dotenv import load_dotenv
 
-from dto.get_repo_response import GetRepoResponse
-from dto.repository import Repository
-from test_data import credentials
+load_dotenv()
 
+@allure.epic('Репозитории API')
+class TestRepositoriesApi:
 
-@pytest.mark.api
-@allure.title('API создание репозитория')
-def test_create_repo_api(create_repo_endpoint, delete_repo):
-    repository = Repository(
-        name=f'{credentials.REPO_NAME}',
-        description='description'
-    )
-    response = create_repo_endpoint.create_repo(repository, authorized=True)
-    GetRepoResponse(**response.json())
-    assert create_repo_endpoint.status_code == 201
-    assert create_repo_endpoint.name == credentials.REPO_NAME
+    @pytest.mark.api
+    @allure.title('API создание репозитория')
+    def test_create_repository_api(self, repository_api_service, delete_repository_req):
+        new_repository = {
+            'name': os.getenv('REPO_NAME'),
+            'description': 'new_description'
+        }
+        response = repository_api_service.create_repository(new_repository)
+        assert response.name == os.getenv('REPO_NAME')
 
+    @pytest.mark.api
+    @allure.title('API создание приватного репозитория')
+    def test_create_private_repository_api(self, repository_api_service, delete_repository_req):
+        new_repository = {
+            'name': os.getenv('REPO_NAME'),
+            'description': 'private description',
+            'private': True
+        }
+        response = repository_api_service.create_repository(new_repository)
+        assert response.private
 
-@pytest.mark.api
-@allure.title('API создание приватного репозитория')
-def test_create_private_repo(create_repo_endpoint, delete_repo):
-    repository = Repository(
-        name=f'{credentials.REPO_NAME}',
-        description='description',
-        private=True
-    )
-    create_repo_endpoint.create_repo(repository, authorized=True)
-    assert create_repo_endpoint.status_code == 201
-    assert create_repo_endpoint.is_private
+    @pytest.mark.api
+    @allure.title('API создание репозитория с существующим именем')
+    def test_create_repository_with_existing_name(self, create_repository_req, repository_api_service, delete_repository_req):
+        new_repository = {
+            'name': os.getenv('REPO_NAME'),
+            'description': 'new_description'
+        }
+        response = repository_api_service.create_repository(new_repository)
+        assert response.status_code == 422
 
+    @pytest.mark.api
+    @allure.title('API создание репозитория без авторизации')
+    def test_create_repository_unauthorized(self, repository_api_service):
+        new_repository = {
+            'name': os.getenv('REPO_NAME'),
+            'description': 'new_description'
+        }
+        response = repository_api_service.create_repository(new_repository, authorized=False)
+        assert response.status_code == 401
+        assert response.json()['message'] == 'Requires authentication'
 
-@pytest.mark.api
-@allure.title('API создание репозитория с существующим именем')
-def test_create_repo_with_existing_name(create_repo_with_api, create_repo_endpoint, delete_repo):
-    repository = Repository(
-        name=f'{credentials.REPO_NAME}',
-        description='description'
-    )
-    create_repo_endpoint.create_repo(repository, authorized=True)
-    assert create_repo_endpoint.status_code == 422
+    @pytest.mark.api
+    @allure.title('API получение существующего репозитория')
+    def test_get_existing_repository_api(self, create_repository_req, repository_api_service, delete_repository_req):
+        repository_api_service.get_repository(
+            owner=os.getenv('LOGIN'),
+            repo=os.getenv('REPO_NAME')
+        )
 
+    @pytest.mark.api
+    @allure.title('API получение несуществующего репозитория')
+    def test_get_non_existing_repository(self, repository_api_service):
+        response = repository_api_service.get_repository(
+            owner=os.getenv('LOGIN'),
+            repo='bulbozhabchik'
+        )
+        assert response.status_code == 404
 
-@pytest.mark.api
-@allure.title('API создание репозитория без авторизации')
-def test_create_repo_unauthorized(create_repo_endpoint):
-    repository = Repository(
-        name=f'{credentials.REPO_NAME}',
-        description='description'
-    )
-    create_repo_endpoint.create_repo(repository, authorized=False)
-    assert create_repo_endpoint.status_code == 401
-    assert create_repo_endpoint.message == 'Requires authentication'
+    @pytest.mark.api
+    @allure.title('API получение репозитория у несуществующего пользователя')
+    def test_get_non_existing_repository(self, repository_api_service):
+        response = repository_api_service.get_repository(
+            owner='bulbozhabchik',
+            repo='bulbozhabchik'
+        )
+        assert response.status_code == 404
 
-@pytest.mark.api
-@allure.title('API получение существующего репозитория')
-def test_get_existing_repo(create_repo_with_api, get_repo_endpoint, delete_repo):
-    get_repo_endpoint.get_repo(f'{credentials.LOGIN}', f'{credentials.REPO_NAME}')
-    assert get_repo_endpoint.status_code == 200
-    assert get_repo_endpoint.name == credentials.REPO_NAME
+    @pytest.mark.api
+    @allure.title('API удаление репозитория')
+    def test_delete_repository(self, create_repository_req, repository_api_service):
+        response = repository_api_service.delete_repository(
+            owner=os.getenv('LOGIN'),
+            repo=os.getenv('REPO_NAME')
+        )
+        assert response.status_code == 204
 
-@pytest.mark.api
-@allure.title('API получение несуществующего репозитория')
-def test_get_non_existing_repo(get_repo_endpoint):
-    get_repo_endpoint.get_repo(f'{credentials.LOGIN}', 'bulbozhabchik')
-    assert get_repo_endpoint.status_code == 404
-
-
-@pytest.mark.api
-@allure.title('API получение репозитория у несуществующего пользователя')
-def test_get_repo_non_existing_user(get_repo_endpoint):
-    get_repo_endpoint.get_repo('BulboZhabchik', 'bulbozhabchik')
-    assert get_repo_endpoint.status_code == 404
-
-
-
-@pytest.mark.api
-@allure.title('API удаление репозитория')
-def test_delete_repo(create_repo_with_api, delete_repo_endpoint):
-    delete_repo_endpoint.delete_repo(f'{credentials.REPO_NAME}')
-    assert delete_repo_endpoint.status_code == 204
-
-
-@pytest.mark.api
-@allure.title('Удаление несуществующего репозитория')
-def test_delete_non_existing_repo(delete_repo_endpoint):
-    delete_repo_endpoint.delete_repo(f'{credentials.REPO_NAME}')
-    assert delete_repo_endpoint.status_code == 404
+    @pytest.mark.api
+    @allure.title('Удаление несуществующего репозитория')
+    def test_delete_non_existing_repository(self, repository_api_service):
+        response = repository_api_service.delete_repository(
+            owner=os.getenv('LOGIN'),
+            repo=os.getenv('REPO_NAME')
+        )
+        assert response.status_code == 404

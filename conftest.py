@@ -1,20 +1,13 @@
 import os
-
 import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
-from dto.repository import Repository
-from endpoints.create_repo_endpoint import CreateRepoEndpoint
-from endpoints.delete_repo_endpoint import DeleteRepoEndpoint
-from endpoints.get_repo_endpoint import GetRepoEndpoint
-from endpoints.get_user_endpoint import GetUserEndpoint
+from services.repository.repository_api_service import RepositoryAPIService
 from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
 from pages.repo_page import RepoPage
 from pages.search_page import SearchPage
-from services.repository.repository_api_service import RepositoryAPIService
-from test_data import credentials
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from pages.login_page import LoginPage
 
 load_dotenv()
@@ -65,47 +58,6 @@ def new_repo_page(driver, authorized_page):
 @pytest.fixture()
 def repo_page(driver):
     return RepoPage(driver)
-#
-# @pytest.fixture()
-# def create_repo(new_repo_page):
-#     new_repo_page.enter_repository_name(os.getenv('REPO_NAME'))
-#     new_repo_page.repo_name_available_label_is_displayed
-#     new_repo_page.click_create_repository_button()
-#     return new_repo_page
-#
-# @pytest.fixture()
-# def create_repo_endpoint():
-#     return CreateRepoEndpoint()
-#
-# @pytest.fixture()
-# def get_repo_endpoint():
-#     return GetRepoEndpoint()
-#
-# @pytest.fixture()
-# def delete_repo_endpoint():
-#     return DeleteRepoEndpoint()
-#
-# @pytest.fixture()
-# def get_user_endpoint():
-#     return GetUserEndpoint()
-#
-# @pytest.fixture()
-# def delete_repo(delete_repo_endpoint):
-#     yield
-#     response = delete_repo_endpoint.delete_repo(f'{os.getenv('REPO_NAME')}')
-#     print('\nSTATUS CODE:', response.status_code)
-#     assert response.status_code == 204
-#
-# @pytest.fixture()
-# def create_repo_with_api(create_repo_endpoint):
-#     repository = Repository(
-#         name=f'{os.getenv('REPO_NAME')}',
-#         description='description'
-#     )
-#     response = create_repo_endpoint.create_repo(repository)
-#     assert response.status_code == 201
-
-##### Service Object
 
 @pytest.fixture()
 def repository_api_service():
