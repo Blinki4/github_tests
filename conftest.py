@@ -57,6 +57,13 @@ def new_repo_page(driver, authorized_page):
     return new_repo_page
 
 @pytest.fixture()
+def create_repository_ui(new_repo_page):
+    new_repo_page.enter_repository_name(os.getenv('REPO_NAME'))
+    new_repo_page.repo_name_available_label_is_displayed
+    new_repo_page.click_create_repository_button()
+    return new_repo_page
+
+@pytest.fixture()
 def repo_page(driver):
     return RepoPage(driver)
 
