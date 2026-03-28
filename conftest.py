@@ -22,7 +22,7 @@ def driver():
     driver.implicitly_wait(10)
     yield driver
     driver.quit()
-#
+
 @pytest.fixture()
 def authorized_page(driver):
     page = LoginPage(driver)
