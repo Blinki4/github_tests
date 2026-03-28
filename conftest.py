@@ -77,11 +77,7 @@ def users_api_service():
 
 @pytest.fixture()
 def create_repository_req(repositories_api_service):
-    new_repository = {
-        'name': os.getenv('REPO_NAME'),
-        'description': 'new_description'
-    }
-    repositories_api_service.create_repository(body=new_repository)
+    repositories_api_service.create_repository()
 
 @pytest.fixture()
 def delete_repository_req(repositories_api_service):

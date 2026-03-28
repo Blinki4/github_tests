@@ -11,42 +11,30 @@ class TestRepositoriesAPI:
     @pytest.mark.api
     @allure.title('API создание репозитория')
     def test_create_repository_api(self, repositories_api_service, delete_repository_req):
-        new_repository = {
-            'name': os.getenv('REPO_NAME'),
-            'description': 'new_description'
-        }
-        response = repositories_api_service.create_repository(new_repository)
+        response = repositories_api_service.create_repository()
         assert response.name == os.getenv('REPO_NAME')
 
     @pytest.mark.api
     @allure.title('API создание приватного репозитория')
     def test_create_private_repository_api(self, repositories_api_service, delete_repository_req):
-        new_repository = {
-            'name': os.getenv('REPO_NAME'),
-            'description': 'private description',
-            'private': True
-        }
-        response = repositories_api_service.create_repository(new_repository)
+        response = repositories_api_service.create_repository(private=True)
         assert response.private
 
     @pytest.mark.api
     @allure.title('API создание репозитория с существующим именем')
-    def test_create_repository_with_existing_name(self, create_repository_req, repositories_api_service, delete_repository_req):
-        new_repository = {
-            'name': os.getenv('REPO_NAME'),
-            'description': 'new_description'
-        }
-        response = repositories_api_service.create_repository(new_repository)
+    def test_create_repository_with_existing_name(
+            self,
+            create_repository_req,
+            repositories_api_service,
+            delete_repository_req
+        ):
+        response = repositories_api_service.create_repository()
         assert response.status_code == 422
 
     @pytest.mark.api
     @allure.title('API создание репозитория без авторизации')
     def test_create_repository_unauthorized(self, repositories_api_service):
-        new_repository = {
-            'name': os.getenv('REPO_NAME'),
-            'description': 'new_description'
-        }
-        response = repositories_api_service.create_repository(new_repository, authorized=False)
+        response = repositories_api_service.create_repository(authorized=False)
         assert response.status_code == 401
         assert response.json()['message'] == 'Requires authentication'
 
