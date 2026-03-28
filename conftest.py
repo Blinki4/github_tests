@@ -50,6 +50,10 @@ def search_page(driver):
     return SearchPage(driver)
 
 @pytest.fixture()
+def repo_page(driver):
+    return RepoPage(driver)
+
+@pytest.fixture()
 def new_repo_page(driver, authorized_page):
     new_repo_page = NewRepoPage(driver)
     authorized_page.open(new_repo_page.url)
@@ -62,10 +66,6 @@ def create_repository_ui(new_repo_page):
     new_repo_page.repo_name_available_label_is_displayed
     new_repo_page.click_create_repository_button()
     return new_repo_page
-
-@pytest.fixture()
-def repo_page(driver):
-    return RepoPage(driver)
 
 @pytest.fixture()
 def repositories_api_service():
