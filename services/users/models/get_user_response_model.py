@@ -2,14 +2,14 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
-class GetUserResponsePlan(BaseModel):
+class GetUserResponsePlanModel(BaseModel):
     name: str
     space: int
     private_repos: int
     collaborators: int
 
 
-class GetUserResponse(BaseModel):
+class GetUserResponseModel(BaseModel):
     login: str
     id: int
     node_id: str
@@ -48,4 +48,4 @@ class GetUserResponse(BaseModel):
     disk_usage: int | None = None
     collaborators: int | None = None
     two_factor_authentication: bool | None = None
-    plan: GetUserResponsePlan | None = None
+    plan: GetUserResponsePlanModel | None = None

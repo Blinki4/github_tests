@@ -1,10 +1,13 @@
+import os
+
 import allure
-from test_data import credentials
 
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class LoginPage(BasePage):
     url = 'https://github.com/login'
@@ -13,7 +16,7 @@ class LoginPage(BasePage):
     sign_in_button_selector = (By.XPATH, '//input[@value="Sign in"]')
     home_title_selector = (By.XPATH, '//h2[text()="Home"]')
     navbar_avatar_selector = (By.XPATH, '//img[@data-testid="github-avatar"]')
-    navigation_menu_username_selector = (By.XPATH, f'//div[@title="{credentials.valid_login}"]')
+    navigation_menu_username_selector = (By.XPATH, f'//div[@title="{os.getenv('LOGIN')}"]')
     error_selector = (By.CSS_SELECTOR, '.js-flash-alert')
     forgot_password_link_selector = (By.ID, 'forgot-password')
     create_account_link_selector = (By.LINK_TEXT, 'Create an account')
