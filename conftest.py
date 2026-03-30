@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 from services.repository.repositories_api_service import RepositoriesAPIService
+from services.search.search_api_service import SearchAPIService
 from services.users.users_api_service import UsersAPIService
 from pages.main_page import MainPage
 from pages.new_repo_page import NewRepoPage
@@ -74,6 +75,11 @@ def repositories_api_service():
 @pytest.fixture()
 def users_api_service():
     return UsersAPIService()
+
+@pytest.fixture()
+def search_api_service():
+    return SearchAPIService()
+
 
 @pytest.fixture()
 def create_repository_req(repositories_api_service):
