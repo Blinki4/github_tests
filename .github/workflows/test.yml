@@ -33,4 +33,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests and generate Allure results
+        env:
+          LOGIN: ${{ secrets.LOGIN }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          TOKEN: ${{ secrets.TOKEN }}
+          REPO_NAME: ${{ secrets.REPO_NAME }}
         run: pytest -v
