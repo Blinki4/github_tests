@@ -15,9 +15,6 @@ on:
   push:
     branches:
       - main    # Запускать workflow при пуше в main
-  pull_requests:
-    branches:
-      - main
 
 jobs:
   run_tests:
