@@ -16,7 +16,7 @@ class TestSearchAPI:
 
     @pytest.mark.api
     @allure.title('Search a repository')
-    def test_search_repository(self, search_api_service):
+    def test_search_repository(self, create_repository_req, search_api_service, delete_repository_req):
         response = search_api_service.search_repository(query='linux')
         found = False
         for repo in response.items:
