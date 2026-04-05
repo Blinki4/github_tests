@@ -36,6 +36,6 @@ jobs:
         env:
           LOGIN: ${{ secrets.LOGIN }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          TOKEN: ${{ secrets.TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}
           REPO_NAME: ${{ secrets.REPO_NAME }}
         run: pytest -v -m api
