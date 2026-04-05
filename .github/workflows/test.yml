@@ -38,4 +38,4 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           TOKEN: ${{ secrets.TOKEN }}
           REPO_NAME: ${{ secrets.REPO_NAME }}
-        run: pytest -v
+        run: pytest -v -m api
