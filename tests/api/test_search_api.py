@@ -30,6 +30,15 @@ class TestSearchAPI:
         response = search_api_service.search_repository(query='lkasjdljadhskdfhgksdjgfsdfkghj')
         assert response.total_count == 0
 
-    def test_search_repository_for_language(self, search_api_service):
-        response = search_api_service.search_repository(query='language:python')
+    @pytest.mark.api
+    @allure.title('Поиск по языку')
+    @pytest.mark.parametrize('language', [
+        'python',
+        'dart',
+        'javascript',
+        'c',
+        'rust',
+    ])
+    def test_search_repository_for_language(self, search_api_service, language):
+        response = search_api_service.search_repository(query=f'language:{language}')
         assert response.total_count > 0
