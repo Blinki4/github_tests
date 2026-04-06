@@ -10,16 +10,22 @@ class TestSearchAPI:
 
     @pytest.mark.api
     @allure.title('Search a user')
-    def test_search_user(self, search_api_service):
+    def test_search_user_api(self, search_api_service):
         response = search_api_service.search_user(query=os.getenv('LOGIN'))
         assert response.items[0].login == os.getenv('LOGIN')
 
     @pytest.mark.api
     @allure.title('Search a repository')
-    def test_search_repository(self, create_repository_req, search_api_service, delete_repository_req):
+    def test_search_repository_api(self, search_api_service):
         response = search_api_service.search_repository(query='linux')
         found = False
         for repo in response.items:
             if repo.name == 'linux':
                 found = True
         assert found
+
+    @pytest.mark.api
+    @allure.title('Поиск по несуществующему запросу')
+    def test_search_non_existing_query_api(self, search_api_service):
+        response = search_api_service.search_repository(query='lkasjdljadhskdfhgksdjgfsdfkghj')
+        assert response.total_count == 0

@@ -16,12 +16,12 @@ class TestUsersAPI:
         'ivanushka-na-python',
         'torvalds'
     ])
-    def test_get_user(self, users_api_service, username):
+    def test_get_user_api(self, users_api_service, username):
         response = users_api_service.get_user(username)
         assert response.login == username
 
     @pytest.mark.api
     @allure.title('Получение несуществующего пользователя')
-    def test_get_non_existing_user(self, users_api_service):
+    def test_get_non_existing_user_api(self, users_api_service):
         response = users_api_service.get_user('BulboZhabchik')
         assert response.status_code == 404
