@@ -27,4 +27,4 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           API_KEY: ${{ secrets.API_KEY }}
           REPO_NAME: ${{ secrets.REPO_NAME }}
-        run: pytest -v -m api
+        run: pytest -v -m api --reruns 2 --reruns-delay 1
