@@ -66,7 +66,7 @@ class TestRepositoriesAPI:
 
     @pytest.mark.api
     @allure.title('API удаление репозитория')
-    def test_delete_repository_api(self, create_repository_req, repositories_api_service, delete_repository_req):
+    def test_delete_repository_api(self, create_repository_req, repositories_api_service):
         response = repositories_api_service.delete_repository(
             owner=os.getenv('LOGIN'),
             repo=os.getenv('REPO_NAME')
