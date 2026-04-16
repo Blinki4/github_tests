@@ -3,9 +3,10 @@ import requests
 from requests import Response
 from config.headers import Headers
 from services.users.models.get_user_response_model import GetUserResponseModel
+from utils.helper import Helper
 
 
-class UsersAPIService:
+class UsersAPIService(Helper):
     def __init__(self):
         self._base_url = 'https://api.github.com/users'
         self._headers = Headers()
@@ -20,6 +21,7 @@ class UsersAPIService:
             url=f'{self._base_url}/{username}',
             headers=self._headers.get_headers()
         )
+        self.attach_response(response.json())
         if response.status_code == 200:
             assert response.status_code == 200, response.json()
             return GetUserResponseModel(**response.json())

@@ -12,6 +12,7 @@ class TestRepositoriesAPI:
     @allure.title('API создание репозитория')
     def test_create_repository_api(self, repositories_api_service, delete_repository_req):
         response = repositories_api_service.create_repository()
+        print(response, 'RESPONSE')
         assert response.name == os.getenv('REPO_NAME')
 
     @pytest.mark.api

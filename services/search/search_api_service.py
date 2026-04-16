@@ -3,8 +3,10 @@ import allure
 from config.headers import Headers
 from services.search.models.search_repository_response_model import SearchRepositoryResponseModel
 from services.search.models.search_user_response_model import SearchUserResponseModel
+from utils.helper import Helper
 
-class SearchAPIService:
+
+class SearchAPIService(Helper):
     def __init__(self):
         self._base_url = 'https://api.github.com/search'
         self._headers = Headers()
@@ -37,6 +39,7 @@ class SearchAPIService:
                 'page': page
             }
         )
+        self.attach_response(response.json())
         assert response.status_code == 200, f'Status code: {response.status_code}'
         return SearchUserResponseModel(**response.json())
 
@@ -68,5 +71,6 @@ class SearchAPIService:
                 'page': page
             }
         )
+        self.attach_response(response.json())
         assert response.status_code == 200, f'Status code: {response.status_code}'
         return SearchRepositoryResponseModel(**response.json())

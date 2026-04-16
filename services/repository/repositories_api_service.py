@@ -5,9 +5,10 @@ from services.repository.models.create_repository_response_model import CreateRe
 from services.repository.models.get_repository_response_model import GetRepositoryResponseModel
 from config.headers import Headers
 from services.repository.payloads import Payloads
+from utils.helper import Helper
 
 
-class RepositoriesAPIService:
+class RepositoriesAPIService(Helper):
     def __init__(self):
         self._base_url = 'https://api.github.com'
         self._headers = Headers()
@@ -24,6 +25,7 @@ class RepositoriesAPIService:
             url=f'{self._base_url}/repos/{owner}/{repo}',
             headers=self._headers.get_headers()
         )
+        self.attach_response(response.json())
         if response.status_code == 200:
             assert response.status_code == 200, response.json()
             return GetRepositoryResponseModel(**response.json())
@@ -42,6 +44,7 @@ class RepositoriesAPIService:
             headers=self._headers.get_headers(authorized),
             json=self._payloads.create_repository(private)
         )
+        self.attach_response(response.json())
         if response.status_code == 201:
             assert response.status_code == 201, response.json()
             return CreateRepositoryResponseModel(**response.json())
@@ -59,4 +62,5 @@ class RepositoriesAPIService:
             url=f'{self._base_url}/repos/{owner}/{repo}',
             headers=self._headers.get_headers(),
         )
+        # self.attach_response(response.json())
         return response
